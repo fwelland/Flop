@@ -1,0 +1,13 @@
+apply plugin: 'war'
+
+
+sourceCompatibility = '1.8'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+
+dependencies {
+    providedCompile 'javax:javaee-api:7.0'
+}
+
+
+

@@ -1,0 +1,45 @@
+apply plugin: 'flyboss'
+
+flyboss {
+    appserver_home = '/opt/jboss-eap-7.0'
+    path_to_deployable =  tasks.getByPath(':rdr:war').archivePath
+}
+
+
+if (project.hasProperty('evaluatingIDE') && project.property('evaluatingIDE') == 'NetBeans') {
+    sourceSets.main.java.srcDir(webAppDir)
+}
+
+
+ext.deployBase="/opt/jboss-eap-7.0/standalone/deployments"
+ext.deployTarget="$deployBase/$war.archiveName"
+ext.dodeployLCFname = "$deployTarget" + ".dodeploy"
+ext.deployedLCFname="$deployTarget" + ".deployed"
+ext.undeployedLCFname="$deployTarget" + ".undeployed"
+
+task updateResources(type: Copy) {
+    from 'src/main/webapp'
+    into deployTarget
+    include '**/*.xhtml'
+}
+
+task deployWar(type: Copy){
+
+    into deployTarget
+    with war
+
+    doLast{
+        def f = file(dodeployLCFname)
+        f.lastModified = System.currentTimeMillis()
+        f.createNewFile()
+    }
+}
+
+task undeployWar <<{
+    delete deployedLCFname
+    delete deployTarget
+    delete undeployedLCFname
+}
+
+deploy.dependsOn ':rdr:war'
+deployWar.dependsOn ':rdr:war'

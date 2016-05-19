@@ -1,0 +1,10 @@
+project.buildscript {
+    repositories {
+        maven {
+            url 'http://dl.bintray.com/fwelland/FredsStuff'
+        }
+    }
+    dependencies {
+        classpath 'org.fhw:gradle-flyboss-plugin:20'
+    }
+}

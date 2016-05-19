@@ -1,0 +1,31 @@
+apply plugin: 'base' 
+
+buildscript{
+    if(file('local-buildscript.gradle').exists()){
+        apply from:  'local-buildscript.gradle'
+    }    
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.13'
+}
+
+
+subprojects{
+
+	version='4'
+	repositories {
+	    mavenCentral()    
+	}
+
+	def localGradle = file('local.gradle')
+	if (localGradle.exists()) {
+	    apply from: localGradle
+	}    
+
+}
+
+
+
+
+
